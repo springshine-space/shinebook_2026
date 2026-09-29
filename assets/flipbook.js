@@ -341,7 +341,11 @@
     else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); prev(); }
     else if (k === "Home") { e.preventDefault(); first(); }
     else if (k === "End") { e.preventDefault(); last(); }
-    else if (k === "Escape" && zoomed) setZoom(false);
+    else if (k === "Escape") {
+      if (zoomed) setZoom(false);
+      // 팝업(iframe) 안에서 열렸다면 부모 페이지에 "닫아 주세요"라고 알립니다.
+      else if (window.parent !== window) window.parent.postMessage({ shinebook: "close" }, "*");
+    }
     else if (k === "+" || k === "=") setZoom(true);
     else if (k === "-" || k === "_") setZoom(false);
     else if ((k === "f" || k === "F") && fsOK) toggleFs();

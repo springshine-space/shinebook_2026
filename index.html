@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>shine book | 스프링샤인</title>
+<meta name="description" content="스프링샤인 발달장애인 작가 9인 9색의 이야기를 나만의 그림책으로 엮은 shine book입니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="shine book | 스프링샤인">
+<meta property="og:description" content="작가의 이야기를 한 권의 책으로 만나다. 궁금한 작가를 선택해 페이지를 넘겨보세요.">
+<meta property="og:image" content="https://springshine-space.github.io/shinebook_2026/green/thumb.webp">
+<style>
+  :root{
+    --blue:#0097F6; --blue-dark:#0071C2; --blue-pale:#EBF5FE;
+    --ink:#222; --sub:#555; --mute:#777; --line:#eee;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:'Pretendard','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    color:var(--ink); line-height:1.7; background:#fff;
+  }
+  #sb-wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+
+  /* 머리말 */
+  .sb-head{text-align:center;padding:56px 0 36px}
+  .sb-logo{display:block;width:150px;height:auto;margin:0 auto 28px}
+  .sb-label{margin:0 0 8px;font-size:14px;font-weight:700;letter-spacing:2px;color:var(--blue)}
+  .sb-title{margin:0 0 16px;font-size:32px;font-weight:800;line-height:1.4}
+  .sb-desc{margin:0;font-size:16px;color:var(--sub)}
+
+  /* 카드 */
+  #sb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:0 0 64px}
+  .sb-card{
+    display:flex;flex-direction:column;cursor:pointer;background:#fff;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .sb-card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,151,246,.15)}
+  .sb-card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .sb-thumb{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--blue-pale);display:block}
+  .sb-info{padding:14px 16px 18px;display:flex;flex-direction:column;flex:1}
+  .sb-name{margin:0 0 4px;font-size:18px;font-weight:700}
+  .sb-intro{margin:0 0 12px;font-size:13px;color:var(--mute);white-space:pre-line;flex:1}
+  .sb-btn{font-size:13px;font-weight:700;color:var(--blue)}
+
+  .sb-foot{text-align:center;padding:32px 0 64px;border-top:1px solid var(--line);font-size:13px;color:#888}
+  .sb-foot a{color:var(--blue-dark);text-decoration:none}
+
+  /* 팝업 */
+  #sb-modal{
+    display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+    background:rgba(0,0,0,.75);align-items:center;justify-content:center;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+  #sb-modal.open{display:flex}
+  #sb-box{position:relative;width:min(1100px,96vw);background:#fff;border-radius:14px;overflow:hidden}
+  #sb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)}
+  #sb-modal-name{font-weight:700;font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #sb-modal-name .sb-mt{font-weight:400;color:#666;margin-left:6px}
+  #sb-actions{display:flex;align-items:center;flex:none}
+  #sb-newtab{font-size:13px;color:var(--blue);margin-right:12px;text-decoration:none}
+  #sb-close{background:none;border:0;font-size:30px;line-height:1;cursor:pointer;color:#333;padding:0 4px}
+  #sb-close:focus-visible,#sb-newtab:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  #sb-frame{width:100%;height:min(82vh,820px);border:0;display:block;background:#e6ebef}
+
+  @media (max-width:768px){
+    .sb-head{padding:40px 0 24px}
+    .sb-logo{width:120px;margin-bottom:22px}
+    .sb-title{font-size:24px}
+    .sb-desc{font-size:15px}
+    #sb-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+    .sb-info{padding:12px 12px 14px}
+  }
+  @media (max-width:480px){
+    #sb-grid{grid-template-columns:1fr}
+    #sb-newtab{display:none}
+    #sb-frame{height:80vh}
+  }
+  @media (prefers-reduced-motion:reduce){.sb-card{transition:none}.sb-card:hover{transform:none}}
+</style>
+</head>
+<body>
+<div id="sb-wrap">
+  <header class="sb-head">
+    <img class="sb-logo" src="assets/logo.webp" alt="스프링샤인">
+    <p class="sb-label">SHINE BOOK</p>
+    <h1 class="sb-title">작가의 이야기를<br>한 권의 책으로 만나다</h1>
+    <p class="sb-desc">
+      shine book은 '2026 은평구 장애인 자립생활프로그램'의<br>
+      지원을 받아 스프링샤인 발달장애인 작가 9인 9색의 이야기를<br>
+      나만의 그림책으로 엮어내었습니다.<br>
+      궁금한 작가를 선택해 페이지를 넘겨보세요.
+    </p>
+  </header>
+
+  <main id="sb-grid"></main>
+
+  <footer class="sb-foot">
+    <p>모든 작품의 저작권은 각 작가와 스프링샤인에 있으며, 무단 복제 및 배포를 금합니다.</p>
+    <p><a href="https://springshine.co.kr/" target="_blank" rel="noopener">springshine.co.kr</a></p>
+  </footer>
+</div>
+
+<!-- 플립북 팝업 (iframe은 팝업을 열 때만 만들고, 닫으면 없앱니다) -->
+<div id="sb-modal" role="dialog" aria-modal="true" aria-labelledby="sb-modal-name" aria-hidden="true">
+  <div id="sb-box">
+    <div id="sb-bar">
+      <span id="sb-modal-name"></span>
+      <span id="sb-actions">
+        <a id="sb-newtab" href="#" target="_blank" rel="noopener">새 창에서 보기 ↗</a>
+        <button id="sb-close" type="button" aria-label="닫기">×</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ▼▼▼ 작가가 추가되면 여기에 한 줄을 더하세요 ▼▼▼
+  // id : 폴더 이름 (썸네일은 id/thumb.webp, 플립북은 id/ 를 자동으로 사용)
+  const writers = [
+    {id:"green",  name:"그린",   title:"은방울꽃처럼",
+     intro:"그린 작가는 꽃과 나무, 풍경 등 자연에서 만나는 다양한 모습을 그립니다. 섬세한 선과 부드러운 색으로 대상을 차분하게 표현하며, 그림 속에는 세상을 바라보는 작가의 따뜻한 마음이 담겨 있습니다.\n자연과 일상의 모습을 자신만의 시선으로 바라보며, 따뜻하고 조용한 작품 세계를 만들어 갑니다."},
+    {id:"zenos",  name:"제노스", title:"제노스의 세상",
+     intro:"일상에서 관심을 가진 대상과 장면을 자신만의 색과 형태로 표현합니다. 평소에는 어린이날과 어버이날, 크리스마스 같은 기념일의 의미를 그림에 담는 작업도 즐겨 합니다.\n주변에서 발견한 소재를 자신만의 시선으로 바라보고, 그림을 통해 생각과 마음을 솔직하게 표현하며 작품 세계를 넓혀가고 있습니다."},
+    {id:"prince", name:"프린스", title:"프린스의 하루",
+     intro:"식물과 동물, 인물과 과일 등 다양한 소재를 자유롭게 그리며, 관심을 가진 대상의 특징을 살펴 다채로운 색과 자신만의 형태로 표현합니다.\n함께 활동하는 동료의 모습과 작업실에서 보낸 하루의 장면을 담으며, 일상과 주변 사람들을 따뜻한 시선으로 기록하는 작가입니다."},
+    {id:"conan",  name:"코난",   title:"코난의 그림이야기",
+     intro:"좋아하는 것과 일상에서 만나는 사람들의 모습을 그림에 담고, 주변에서 경험한 장면과 기억에 남는 순간을 자세히 관찰해 자신만의 방식으로 표현합니다.\n만화 《명탐정 코난》을 좋아해 '코난'이라는 닉네임으로 활동하며, 날씨와 사람들의 하루에 관심이 많아 비 오는 날이면 비 소식을 다정하게 전하는 작가입니다."},
+    {id:"jams",   name:"잼스",   title:"잼스의 힐링북",
+     intro:"2012년부터 스프링샤인과 함께하며 망설임 없이 그어 나가는 선과 솔직하고 분명한 표현으로 꾸준히 작품 활동을 이어오고 있습니다.\n피아노 연주에도 재능이 있고 최근에는 아이패드 디지털 드로잉을 배우며, 음악과 영화, 드라마 등 다양한 예술로 자신의 세계를 넓혀가는 작가입니다."},
+    {id:"romi",   name:"로미",   title:"나를 행복하게 만드는 것들",
+     intro:"회화와 디지털 드로잉, 도예 등 다양한 분야에서 동물과 장미 같은 좋아하는 소재를 섬세하게 관찰하고, 꼼꼼한 표현과 다채로운 색으로 그려냅니다.\n한 작품을 완성하기까지 정성을 기울이며, 컬러링 체험과 도예 강사로도 활동하며 사람들과 예술을 나누는 작가입니다."},
+    {id:"luigi",  name:"루이지", title:"추억여행",
+     intro:"관심을 가진 대상의 특징을 빠르게 포착해, 망설임 없이 그어 나가는 힘 있는 선과 단순하고 분명한 형태로 표현합니다.\n좋아하는 사람과 장소, 기억에 남는 장면을 자신만의 방식으로 배치해 솔직하고 생동감 있게 담아내는 작가입니다."},
+    {id:"taeru",  name:"태루",   title:"안녕하세요 저는 태루입니다",
+     intro:"주변의 사물과 풍경, 사람을 곧은 선과 세모·네모·동그라미 같은 형태로 반복하고 질서 있게 배치해 독특한 공간을 만들어 냅니다.\n인물의 특징을 단순하고 분명하게 포착하며, 하나하나 또렷하게 바라본 시선으로 자신만의 세계를 그리는 작가입니다."},
+    {id:"hari",   name:"해리",   title:"파랑새",
+     intro:"파랑새와 마술 도구, 하늘과 구름 등 좋아하는 소재를 밝고 따뜻한 색으로 그려내는 작가입니다.\n그림과 도예로 만든 지노피리, 마술 공연으로 자신의 마음과 이야기를 세상에 전합니다."}
+  ];
+  // ▲▲▲ 여기까지 ▲▲▲
+
+  const grid  = document.getElementById('sb-grid');
+  const modal = document.getElementById('sb-modal');
+  const box   = document.getElementById('sb-box');
+  const mName = document.getElementById('sb-modal-name');
+  const mLink = document.getElementById('sb-newtab');
+  let lastCard = null;   // 팝업을 닫은 뒤 포커스를 되돌릴 카드
+  let frame = null;      // 지금 열려 있는 플립북 iframe
+
+  function el(tag, className, text){
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+  function mountFrame(url){
+    unmountFrame();
+    frame = document.createElement('iframe');
+    frame.id = 'sb-frame';
+    frame.title = 'shine book';
+    frame.setAttribute('allow', 'fullscreen');
+    frame.setAttribute('allowfullscreen', '');
+    frame.src = url;                 // 열었을 때만 로딩
+    box.appendChild(frame);
+  }
+  function unmountFrame(){
+    if (frame) { frame.remove(); frame = null; }   // 닫으면 로딩 해제
+  }
+  const bookUrl  = (w) => w.id + '/';
+  const findById = (id) => writers.find((w) => w.id === id);
+
+  /* ---------- 카드 만들기 ---------- */
+  const cards = {};
+  writers.forEach((w) => {
+    const card = el('div', 'sb-card');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', w.name + ' 《' + w.title + '》 열기');
+
+    const img = el('img', 'sb-thumb');
+    img.src = w.id + '/thumb.webp';
+    img.alt = w.name + ' 《' + w.title + '》 표지';
+    img.loading = 'lazy';
+
+    const info = el('div', 'sb-info');
+    info.appendChild(el('p', 'sb-name', w.name));
+    info.appendChild(el('p', 'sb-intro', w.intro));
+    info.appendChild(el('span', 'sb-btn', '《' + w.title + '》 →'));
+
+    card.appendChild(img);
+    card.appendChild(info);
+    card.addEventListener('click', () => openBook(w, card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBook(w, card); }
+    });
+    grid.appendChild(card);
+    cards[w.id] = card;
+  });
+
+  /* ---------- 팝업 열기·닫기 (화면 표시만) ---------- */
+  function show(w){
+    mName.textContent = w.name;
+    mName.appendChild(el('span', 'sb-mt', '· ' + w.title));
+    document.title = w.name + ' · ' + w.title + ' | shine book';
+    mLink.href = bookUrl(w);
+    mountFrame(bookUrl(w));
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('sb-close').focus({preventScroll:true});
+  }
+  function hide(){
+    if (!modal.classList.contains('open')) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    unmountFrame();
+    document.title = 'shine book | 스프링샤인';
+    document.body.style.overflow = '';
+    if (lastCard) lastCard.focus({preventScroll:true});
+  }
+
+  /* ---------- 주소(#폴더명)와 연동: 작가별 링크 공유, 뒤로가기로 닫기 ---------- */
+  function openBook(w, card){
+    lastCard = card || cards[w.id] || null;
+    show(w);
+    history.pushState({sb:w.id}, '', '#' + w.id);
+  }
+  function closeBook(){
+    if (history.state && history.state.sb) {
+      history.back();                // popstate에서 hide() 처리
+    } else {
+      hide();
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+  window.addEventListener('popstate', () => {
+    const w = findById(location.hash.slice(1));
+    if (w) { lastCard = cards[w.id]; show(w); } else { hide(); }
+  });
+
+  document.getElementById('sb-close').addEventListener('click', closeBook);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeBook(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeBook();
+  });
+  // 플립북(iframe) 안에서 ESC를 눌렀을 때도 닫히도록: 같은 사이트에서 온 메시지만 받습니다.
+  window.addEventListener('message', (e) => {
+    if (e.origin === location.origin && e.data && e.data.shinebook === 'close' && modal.classList.contains('open')) closeBook();
+  });
+
+  // 주소에 #zenos 처럼 붙어 있으면 바로 열기
+  const first = findById(location.hash.slice(1));
+  if (first) { lastCard = cards[first.id]; show(first); }
+})();
+</script>
+</body>
+</html>
