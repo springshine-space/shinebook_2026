@@ -1,0 +1,240 @@
+/* shine book · 공통 플립북 스타일
+   모든 작가 폴더가 이 파일 하나를 함께 사용합니다. */
+
+:root {
+  --blue: #0097f6;
+  --blue-dark: #0071c2;
+  --blue-pale: #ebf5fe;
+  --stage: #e6ebef;
+  --ink: #2b3742;
+  --line: #d6dee5;
+  --bar-h: 52px;
+  --pw: 400px; /* 한 쪽의 가로 (JS가 화면에 맞춰 계산) */
+  --ph: 462px; /* 한 쪽의 세로 */
+  --dur: 0.85s;
+  --ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: var(--stage);
+  color: var(--ink);
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#app {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- 무대 ---------- */
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+#stage.zoomed { overflow: auto; cursor: grab; }
+#stage.zoomed.drag { cursor: grabbing; }
+
+#book {
+  position: relative;
+  flex: none;
+  margin: auto;
+  width: calc(var(--pw) * 2);
+  height: var(--ph);
+  transition: transform var(--dur) var(--ease);
+}
+#book.single { width: var(--pw); transition: none; }
+#book.instant, #book.instant * { transition: none !important; }
+
+/* 책 아래 그림자 (펼친 쪽에만 보이도록 좌우 분리) */
+.sh {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(20, 40, 60, 0.18), 0 12px 32px rgba(20, 40, 60, 0.2);
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+#shL { left: 0; }
+#shR { left: 50%; }
+
+/* ---------- 펼침면: 장(leaf) ---------- */
+.leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transform: perspective(2600px) rotateY(0deg);
+  transition: transform var(--dur) var(--ease);
+}
+.leaf.flipped { transform: perspective(2600px) rotateY(-180deg); }
+
+.face, .sp {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #fff;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+}
+.face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.face.back { transform: rotateY(180deg); }
+
+/* 책등(가운데) 쪽 은은한 음영 */
+.face::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0) 6%);
+}
+.face.back::before {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.11), rgba(0, 0, 0, 0) 6%);
+}
+/* 넘어가는 동안 스치는 그림자 */
+.face::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+.leaf.turning .face::after { animation: shade var(--dur) ease-in-out; }
+@keyframes shade {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.2; }
+}
+
+/* ---------- 한 쪽씩 보기(모바일) ---------- */
+#book.single .sp {
+  opacity: 0;
+  transform: translateX(26%);
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  box-shadow: 0 2px 6px rgba(20, 40, 60, 0.18), 0 12px 32px rgba(20, 40, 60, 0.2);
+}
+#book.single .sp.before { transform: translateX(-26%); }
+#book.single .sp.cur { opacity: 1; transform: none; pointer-events: auto; }
+
+/* ---------- 뒷표지 ---------- */
+.end { display: grid; place-items: center; text-align: center; color: #33414d; }
+.end-in { padding: 0 8%; }
+.end .logo { display: block; width: calc(var(--pw) * 0.4); height: auto; margin: 0 auto calc(var(--pw) * 0.09); }
+.end .e-title { margin: 0; font-size: calc(var(--pw) * 0.068); font-weight: 700; line-height: 1.35; }
+.end .e-artist { margin: calc(var(--pw) * 0.02) 0 calc(var(--pw) * 0.1); font-size: calc(var(--pw) * 0.042); color: #52606d; }
+.end .e-copy { margin: 0; font-size: calc(var(--pw) * 0.028); color: #7b8794; line-height: 1.7; }
+.end a { color: var(--blue-dark); text-decoration: none; }
+
+/* ---------- 로딩 ---------- */
+#loading {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+  background: var(--stage);
+  transition: opacity 0.4s;
+}
+#loading.done { opacity: 0; pointer-events: none; }
+.ring {
+  width: 34px; height: 34px;
+  border: 3px solid var(--blue-pale);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- 하단 바 ---------- */
+#bar {
+  position: relative;
+  flex: none;
+  height: var(--bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+#prog { position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: transparent; }
+#prog i { display: block; height: 100%; width: 0; background: var(--blue); transition: width 0.5s var(--ease); }
+
+#name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #52606d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 6px;
+}
+#nav { display: flex; align-items: center; gap: 2px; }
+#tools { flex: 1; display: flex; justify-content: flex-end; gap: 2px; }
+#label {
+  min-width: 96px;
+  text-align: center;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.btn {
+  width: 40px; height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #3d4a56;
+  cursor: pointer;
+}
+.btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.btn:hover { background: var(--blue-pale); color: var(--blue-dark); }
+.btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.btn[disabled] { opacity: 0.28; cursor: default; background: transparent; color: #3d4a56; }
+.btn[aria-pressed="true"] { background: var(--blue-pale); color: var(--blue-dark); }
+.btn[hidden] { display: none; }
+
+@media (max-width: 560px) {
+  #name { display: none; }
+  #nav { margin: 0 auto; }
+  #tools { flex: none; }
+  #label { min-width: 84px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0.01s; }
+  .leaf.turning .face::after { animation: none; }
+}
+
+/* 인쇄로 내려받는 것을 어렵게 */
+@media print { body { display: none; } }
