@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>프린스의 하루 · 프린스 | shine book</title>
+<meta name="description" content="스프링샤인 프린스 작가의 그림책 「프린스의 하루」을 페이지를 넘기며 볼 수 있는 shine book입니다.">
+<link rel="stylesheet" href="../assets/flipbook.css">
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <div id="loading" aria-live="polite" aria-label="불러오는 중"><span class="ring"></span></div>
+    <div id="book"></div>
+  </div>
+
+  <div id="bar">
+    <div id="prog"><i></i></div>
+    <div id="name">프린스의 하루 · 프린스</div>
+
+    <div id="nav">
+      <button class="btn" id="prev" type="button" aria-label="이전 페이지">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <span id="label" aria-live="polite">표지</span>
+      <button class="btn" id="next" type="button" aria-label="다음 페이지">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div id="tools">
+      <button class="btn" id="zoom" type="button" aria-label="확대" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>
+          <path class="i-in" d="M11 8.5v5M8.5 11h5"/>
+          <path class="i-out" d="M8.5 11h5" style="display:none"/>
+        </svg>
+      </button>
+      <button class="btn" id="fs" type="button" aria-label="전체화면" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ▼ 작가마다 이 부분만 바꿉니다 ▼ -->
+<script>
+  window.FLIPBOOK = {
+    title: "프린스의 하루",
+    artist: "프린스",
+    pages: 25,                                   // pages 폴더의 이미지 개수 (01.webp ~ 25.webp)
+    copyright: "© 2026 프린스 & 스프링샤인",
+    homepage: "https://springshine.co.kr/"
+  };
+</script>
+<!-- ▲ 여기까지 ▲ -->
+
+<script src="../assets/flipbook.js"></script>
+</body>
+</html>
